@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <h1>Weather Paru</h1>
+        <div class="search">
+            <input type="text" id="search_input" class="search_i" placeholder="Enter the city">
+            <button class="search_btn" ><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
+        <div class="result">
+            <img src="weather-app.png"  alt="" id="max">
+            <h2 id="climate"></h2>
+            <h2 id="temp">22°C</h2>
+            <h2 id="name">Coimbatore</h2>
+            <div class="hw">
+
+                <div class="h">
+                    <img id="mini"src="humidity.png" alt="">
+                    <h3 id="humidity">Humidty:</h3>
+                </div>
+
+                 <div class="w">
+                <img id="mini"src="wind.png" alt="">
+                <h3 id="wind">Wind:</h3></div>
+                 </div>
+            
+        </div>
+    </div>
+
+    <script>
+        const apikey="2c2596a40e52e8099a016bc3cd7c65f4";
+        const apiUrl="https://api.openweathermap.org/data/2.5/weather?&units=metric";//&q=bangalore";
+        const city=document.querySelector(".search_i");
+        var btn=document.querySelector(".search_btn");
+       var image=document.getElementById("max");
+        async function getWeather(city){
+           console.log(city);
+            var n=`&q=${city}`;
+            const response =await fetch(apiUrl+n+` &appid=${apikey}`);
+            var data = await response.json();
+            console.log(data);
+            document.getElementById("name").innerHTML=data.name;
+            document.getElementById("temp").innerHTML=data.main.temp +"°C";
+            document.getElementById("humidity").innerHTML="Humidity:"+data.main.humidity +"%";
+            document.getElementById("wind").innerHTML="Wind:"+data.wind.speed +"km/h";
+            document.getElementById("climate").innerHTML=data.weather[0].main;
+            console.log(data.weather[0].main);
+            if(data.weather[0].main=="Clouds"){
+                image.src="cloudy.png";
+            }
+            else if(data.weather[0].main=="Rain"){
+                image.src="storm.png";
+            }
+            else if(data.weather[0].main=="Clear"){
+                image.src="sun.png";
+            }
+            else if(data.weather[0].main=="Drizzle"){
+                image.src="drizzle.png";
+            }
+            else if(data.weather[0].main=="Mist"){
+                image.src="haze.png";
+            }
+            
+        }
+        btn.addEventListener("click", () =>{ getWeather(city.value);}
+        )
+        
+        // btn.addEventListener("click", ()=> {getWeather(city.value)});
+    </script>
+</body>
+</html>
